@@ -1,24 +1,20 @@
-import * as GalaChainAccess from './package.js';
+import * as GalaChainAccess from './galachain-access.js';
 
 // Browser Wallet
-const getEthereumWalletAddress =
-  GalaChainAccess.browserWallet.getEthereumWalletAddress;
-const getRequestBodySignature =
-  GalaChainAccess.browserWallet.getRequestBodySignature;
+// const getEthereumWalletAddress = GalaChainAccess.getEthereumWalletAddress;
+// const getRequestBodySignature = GalaChainAccess.getRequestBodySignature;
 
 // Offline Wallet
-// const getEthereumWalletAddress = async () => {
-//   return '0xTBD' as GalaChainAccess.EthereumWalletAddress;
-// };
+const getEthereumWalletAddress = async () => {
+  return '0xTBD' as GalaChainAccess.EthereumWalletAddress;
+};
 
-// const getSecp256k1PrivateKey = async () => {
-//   return 'TBD' as Secp256k1PrivateKey;
-// };
+const getSecp256k1PrivateKey = async () => {
+  return 'TBD' as GalaChainAccess.Secp256k1PrivateKey;
+};
 
-// const getRequestBodySignature =
-//   GalaChainAccess.offlineWallet.makeRequestBodySignatureFn(
-//     getSecp256k1PrivateKey,
-//   );
+const getRequestBodySignature =
+  GalaChainAccess.makeOfflineRequestBodySignatureFn(getSecp256k1PrivateKey);
 
 const chainBaseUri = 'http://localhost:3002/api';
 
@@ -62,9 +58,9 @@ const main = async () => {
   }
 
   const transferTokenResult = await chainMethods.transferToken(
-    await GalaChainAccess.signing.getSignedPrefixedRequestBody({
+    await GalaChainAccess.getSignedPrefixedRequestBody({
       getRequestBodySignatureFn,
-      prefixedRequestBody: GalaChainAccess.signing.getPrefixedRequestBody({
+      prefixedRequestBody: GalaChainAccess.getPrefixedRequestBody({
         to,
         tokenInstance: {
           collection: 'GALA',

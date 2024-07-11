@@ -1,9 +1,14 @@
 import * as esbuild from 'esbuild';
-import copyStaticFiles from 'esbuild-copy-static-files';
+import esbuildPluginDts from 'esbuild-plugin-d.ts';
 
 await esbuild.build({
-  entryPoints: ['src/example.ts'],
-  bundle: true,
-  outfile: 'dist/example.js',
-  plugins: [copyStaticFiles({ src: './public', dest: './dist' })],
+  entryPoints: ['src/galachain-access.ts'],
+  bundle: false,
+  outdir: 'dist',
+  // outfile: 'dist/galachain-access.js',
+  plugins: [
+    esbuildPluginDts({
+      outDir: 'dist',
+    }),
+  ],
 });
