@@ -12,8 +12,8 @@ import {
 } from './galachain-access.js';
 
 // Browser Wallet
-// const getEthereumWalletAddress = GalaChainAccess.getEthereumWalletAddress;
-// const getRequestBodySignature = GalaChainAccess.getRequestBodySignature;
+// const getEthereumWalletAddress = getEthereumWalletAddress;
+// const getRequestBodySignature = getRequestBodySignature;
 
 // Offline Wallet
 const getEthereumWalletAddress = async () => {

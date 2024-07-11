@@ -16,6 +16,7 @@ export const getEthereumSignedMessagePrefix = (
 ): EthereumSignedMessagePrefix => {
   return `\u0019Ethereum Signed Message:\n${requestBodyLength}` as EthereumSignedMessagePrefix;
 };
+
 export const getPrefixedRequestBody = <T extends object>(
   requestBody: T,
 ): PrefixedRequestBody<T> => {
