@@ -1,4 +1,15 @@
-import * as GalaChainAccess from './galachain-access.js';
+import {
+  EthereumWalletAddress,
+  PrefixedRequestBody,
+  Secp256k1PrivateKey,
+  getChecksumEthereumWalletAddress,
+  getGalaChainAddress,
+  getPrefixedRequestBody,
+  getSignedPrefixedRequestBody,
+  isGalaChainClientAddress,
+  makeChainMethods,
+  makeOfflineRequestBodySignatureFn,
+} from './galachain-access.js';
 
 // Browser Wallet
 // const getEthereumWalletAddress = GalaChainAccess.getEthereumWalletAddress;
@@ -6,20 +17,21 @@ import * as GalaChainAccess from './galachain-access.js';
 
 // Offline Wallet
 const getEthereumWalletAddress = async () => {
-  return '0xTBD' as GalaChainAccess.EthereumWalletAddress;
+  return '0xTBD' as EthereumWalletAddress;
 };
 
 const getSecp256k1PrivateKey = async () => {
-  return 'TBD' as GalaChainAccess.Secp256k1PrivateKey;
+  return 'TBD' as Secp256k1PrivateKey;
 };
 
-const getRequestBodySignature =
-  GalaChainAccess.makeOfflineRequestBodySignatureFn(getSecp256k1PrivateKey);
+const getRequestBodySignature = makeOfflineRequestBodySignatureFn(
+  getSecp256k1PrivateKey,
+);
 
 const chainBaseUri = 'http://localhost:3002/api';
 
 const main = async () => {
-  const chainMethods = GalaChainAccess.makeChainMethods(chainBaseUri);
+  const chainMethods = makeChainMethods(chainBaseUri);
 
   const ethereumWalletAddress = await getEthereumWalletAddress();
 
@@ -27,20 +39,19 @@ const main = async () => {
     return;
   }
 
-  const checksumEthereumWalletAddress =
-    GalaChainAccess.getChecksumEthereumWalletAddress(ethereumWalletAddress);
+  const checksumEthereumWalletAddress = getChecksumEthereumWalletAddress(
+    ethereumWalletAddress,
+  );
 
   const getRequestBodySignatureFn = <TRequestBody>(
-    prefixedRequestBody: GalaChainAccess.PrefixedRequestBody<TRequestBody>,
+    prefixedRequestBody: PrefixedRequestBody<TRequestBody>,
   ) =>
     getRequestBodySignature({
       checksumEthereumWalletAddress,
       prefixedRequestBody,
     });
 
-  const owner = GalaChainAccess.getGalaChainAddress(
-    checksumEthereumWalletAddress,
-  );
+  const owner = getGalaChainAddress(checksumEthereumWalletAddress);
   if (!owner) {
     return;
   }
@@ -53,14 +64,14 @@ const main = async () => {
   console.log('👉 balances', balances);
 
   const to = 'client|6617fdcffbe793ab3db0594d';
-  if (!GalaChainAccess.isGalaChainClientAddress(to)) {
+  if (!isGalaChainClientAddress(to)) {
     return;
   }
 
   const transferTokenResult = await chainMethods.transferToken(
-    await GalaChainAccess.getSignedPrefixedRequestBody({
+    await getSignedPrefixedRequestBody({
       getRequestBodySignatureFn,
-      prefixedRequestBody: GalaChainAccess.getPrefixedRequestBody({
+      prefixedRequestBody: getPrefixedRequestBody({
         to,
         tokenInstance: {
           collection: 'GALA',
