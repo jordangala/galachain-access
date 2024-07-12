@@ -1,21 +1,12 @@
 export {
-  getChecksumEthereumWalletAddress,
   getGalaChainAddress,
-  isEthereumWalletAddress,
   isGalaChainClientAddress,
-  isGalaChainEthereumAddress,
 } from './galachain-type-helpers.js';
-export * from './galachain-types.js';
-export { makeChainMethods } from './method-helpers.js';
-export {
-  getPrefixedRequestBody,
-  getSignedPrefixedRequestBody,
-} from './signing-helpers.js';
 
-export {
-  getEthereumWalletAddress,
-  getRequestBodySignature,
-} from './wallet-browser-helpers.js';
-export { makeRequestBodySignatureFn as makeOfflineRequestBodySignatureFn } from './wallet-offline-helpers.js';
+export { getChainMethods } from './galachain-method-helpers.js';
+export { getSignRequestBodyWithPersonalSignPrefixFn } from './sign-personal-helpers.js';
+export { getSignRequestBodyWithSecp256k1PrivateKeyFn } from './sign-secp256k1-helpers.js';
 
-export { type Secp256k1PrivateKey } from './wallet-offline-helpers.js';
+export { type EthereumWalletAddress } from './galachain-types.js';
+
+export { type Secp256k1PrivateKey } from './sign-types.js';

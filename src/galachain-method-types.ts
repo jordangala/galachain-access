@@ -12,7 +12,39 @@ export type TransferTokenRequestBody = {
   quantity: string;
 };
 
-export type TransferTokenResponseBody = unknown;
+export type TransferTokenResponseBodyToken = {
+  additionalKey: string;
+  category: string;
+  collection: string;
+  inUseHolds: [
+    {
+      created: number;
+      createdBy: string;
+      expires: number;
+      instanceId: string;
+      lockAuthority: string;
+      name: string;
+      quantity: string;
+    },
+  ];
+  instanceIds: string;
+  lockedHolds: [
+    {
+      created: number;
+      createdBy: string;
+      expires: number;
+      instanceId: string;
+      lockAuthority: string;
+      name: string;
+      quantity: string;
+    },
+  ];
+  owner: string;
+  quantity: string;
+  type: string;
+};
+
+export type TransferTokenResponseBody = TransferTokenResponseBodyToken[];
 
 export type FetchBalancesRequestBody = {
   owner: GalaChainAddress;
@@ -38,8 +70,4 @@ export type FetchBalancesResponseBodyToken = {
   }>;
 };
 
-export type FetchBalancesResponseBody = {
-  Status: number;
-  Message: string;
-  Data: FetchBalancesResponseBodyToken[];
-};
+export type FetchBalancesResponseBody = FetchBalancesResponseBodyToken[];
