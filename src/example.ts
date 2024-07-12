@@ -1,51 +1,44 @@
-import {
-  getGalaChainAddress,
-  isGalaChainClientAddress,
-  getChainMethods,
-  EthereumWalletAddress,
-  Secp256k1PrivateKey,
-  getSignRequestBodyWithSecp256k1PrivateKeyFn,
-} from './galachain-access.js';
-import { getSignRequestBodyWithPersonalSignPrefixFn } from './sign-personal-helpers.js';
-// import { makeSignRequestBodyWithSecp256k1PrivateKey } from './sign-secp256k1-helpers.js';
+import * as GalaChainAccess from './galachain-access.js';
 
 const chainBaseUri = 'http://localhost:3002/api';
 
 const getEthereumWalletAddress = async () => {
-  return '0x' as EthereumWalletAddress;
+  return process.env.ETHEREUM_WALLET_ADDRESS ?? '';
 };
 
 const getSepc256k1PrivateKeyFn = async () => {
-  return '' as Secp256k1PrivateKey;
+  return process.env.SECP256K1_PRIVATE_KEY ?? '';
 };
 
-const signRequestBodyFn = getSignRequestBodyWithSecp256k1PrivateKeyFn({
-  getEthereumWalletAddress,
-  getSepc256k1PrivateKeyFn,
-});
-
-// const signRequestBodyFn = getSignRequestBodyWithPersonalSignPrefixFn();
+const signRequestBodyFn =
+  GalaChainAccess.getSignRequestBodyWithSecp256k1PrivateKeyFn({
+    getEthereumWalletAddress,
+    getSepc256k1PrivateKeyFn,
+  });
 
 const main = async () => {
-  const chainMethods = getChainMethods({
+  const chainMethods = GalaChainAccess.getChainMethods({
     chainBaseUri,
     signRequestBodyFn,
   });
 
-  // const owner = getGalaChainAddress(await getEthereumWalletAddress());
-  // if (!owner) {
-  //   return;
-  // }
+  const owner = GalaChainAccess.getGalaChainAddress(
+    await getEthereumWalletAddress(),
+  );
 
-  // const balances = await chainMethods.fetchBalances({
-  //   owner,
-  //   collection: 'GALA',
-  // });
+  if (!owner) {
+    return;
+  }
 
-  // console.log('👉 balances', balances);
+  const balances = await chainMethods.fetchBalances({
+    owner,
+    collection: 'GALA',
+  });
+
+  console.log('👉 balances', balances);
 
   const to = 'client|6617fdcffbe793ab3db0594d';
-  if (!isGalaChainClientAddress(to)) {
+  if (!GalaChainAccess.isGalaChainAddress(to)) {
     return;
   }
 

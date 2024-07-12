@@ -1,6 +1,6 @@
 export {
   getGalaChainAddress,
-  isGalaChainClientAddress,
+  isGalaChainAddress,
 } from './galachain-type-helpers.js';
 
 export { getChainMethods } from './galachain-method-helpers.js';
@@ -10,3 +10,5 @@ export { getSignRequestBodyWithSecp256k1PrivateKeyFn } from './sign-secp256k1-he
 export { type EthereumWalletAddress } from './galachain-types.js';
 
 export { type Secp256k1PrivateKey } from './sign-types.js';
+
+export { getEthereumWalletAddress as getPersonalSignEthereumWalletAddress } from './sign-personal-helpers.js';

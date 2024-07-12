@@ -1,6 +1,5 @@
 import { BrowserProvider, Eip1193Provider, getAddress } from 'ethers';
 import stringify from 'json-stringify-deterministic';
-import { Brand } from './branding-types.js';
 import { getChecksumEthereumWalletAddress } from './galachain-type-helpers.js';
 import {
   ChecksumEthereumWalletAddress,
@@ -8,6 +7,8 @@ import {
 } from './galachain-types.js';
 import {
   PersonalSignPrefix,
+  PersonalSignPrefixedRequestBody,
+  RequestBodyLength,
   Signature,
   SignRequestBodyFn,
 } from './sign-types.js';
@@ -44,11 +45,6 @@ export const getEthereumWalletAddress = async () => {
   }
 };
 
-export type RequestBodyLength = Brand<number, 'RequestBodyLength'>;
-export type PrefixedRequestBody<TRequestBody> = TRequestBody & {
-  prefix: PersonalSignPrefix;
-};
-
 export const getRequestBodyLength = <TRequestBody>(
   payload: TRequestBody,
 ): RequestBodyLength => {
@@ -63,7 +59,7 @@ export const getPersonalSignPrefix = (
 
 export const getPrefixedRequestBody = <TRequestBody>(
   requestBody: TRequestBody,
-): PrefixedRequestBody<TRequestBody> => {
+): PersonalSignPrefixedRequestBody<TRequestBody> => {
   const requestBodyLength = getRequestBodyLength(requestBody);
   const prefix = getPersonalSignPrefix(requestBodyLength);
 
@@ -82,7 +78,7 @@ export const getPrefixedRequestBody = <TRequestBody>(
 };
 
 export const getRequestBodySignature = async <TRequestBody>(args: {
-  prefixedRequestBody: PrefixedRequestBody<TRequestBody>;
+  prefixedRequestBody: PersonalSignPrefixedRequestBody<TRequestBody>;
   checksumEthereumWalletAddress: ChecksumEthereumWalletAddress;
 }): Promise<Signature | undefined> => {
   if (!window.ethereum) {

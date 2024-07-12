@@ -6,6 +6,13 @@ import {
   GalaChainClientAddress,
   GalaChainEthereumAddress,
 } from './galachain-types.js';
+import { Secp256k1PrivateKey } from './sign-types.js';
+
+export function isSecp256k1PrivateKey(
+  privateKey: unknown,
+): privateKey is Secp256k1PrivateKey {
+  return typeof privateKey === 'string';
+}
 
 export function isEthereumWalletAddress(
   address: string,
@@ -38,13 +45,14 @@ export const getChecksumEthereumWalletAddress = (
 ) => getAddress(address) as ChecksumEthereumWalletAddress;
 
 export const getGalaChainAddress = (
-  address:
-    | ChecksumEthereumWalletAddress
-    | EthereumWalletAddress
-    | GalaChainAddress,
+  address: string,
 ): GalaChainAddress | undefined => {
   if (isGalaChainAddress(address)) {
     return address;
+  }
+
+  if (!isEthereumWalletAddress(address)) {
+    throw new Error('Invalid Ethereum wallet address');
   }
 
   const checksumEthereumWalletAddress =
